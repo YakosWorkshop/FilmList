@@ -4,46 +4,59 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.filmlist.ui.theme.FilmListTheme
-import kotlinx.serialization.Serializable
+import com.example.network.KtorClient
+import com.example.network.model.Movie
+import com.example.network.TestFile
 
 class MainActivity : ComponentActivity() {
+    private val ktorClient = KtorClient()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var movie by remember {
+                mutableStateOf<Movie?>(null)
+            }
+            var movieList by remember {
+                mutableStateOf<List<Movie>?>(null)
+            }
+            LaunchedEffect(key1=Unit, block={
+                movie = ktorClient.getMovieById(68540)
+                movieList = ktorClient.getMovieByTitle("Harry Potter")
+            })
+
             FilmListTheme {
-                @Serializable
-                object Profile
-                @Serializable
-                object FriendsList
+                Scaffold(modifier=Modifier.fillMaxSize()) { innerPadding ->
+                    Column {
+                        Greeting(
+                            name = "Android",
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                        Text(text=movie?.getPosterUrl("w92")?: "No Image Url")
+                        TestFile()
+                        //Text(text=movie?.title ?: "No title")
+                        //Text(text=movie?.date ?: "No date")
+                        //Text(text=movie?.overview ?: "No overview")
+                        //Text(text=movie?.popularity.toString() ?: "No popularity")
 
-                val navController = rememberNavController()
 
-                NavHost(navController = navController, startDestination = Profile) {
-                    composable<Profile> { ProfileScreen( /* ... */ ) }
-                    composable<FriendsList> { FriendsListScreen( /* ... */ ) }
-                    // Add more destinations similarly.
-                }
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    }
                 }
             }
         }

@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FilmList"
 include(":app")
+include(":network")
