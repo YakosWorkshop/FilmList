@@ -18,8 +18,10 @@ import java.security.InvalidParameterException
 @Serializable
 data class Movie (
     val id: Int = 0,
-    val title: String = "Unknown Title",
+    var title: String = "Unknown Title",
+    val runtime: Int = 0,
     @SerialName("release_date") val date: String = "Unknown Date",
+    @SerialName("vote_average") val score: Double = 0.0,
     val popularity: Double = 0.0,
     val overview: String = "No Overview Available",
     @SerialName("poster_path") val posterPath: String? = null,
@@ -34,11 +36,11 @@ data class Movie (
         "w342",
         "w500",
         "w780",
-        "orignal"
+        "original"
     )
 
     /**
-     * @param size the size of image. Restricted to: "w92", "w154", "w185", "w342", "w500", "w780", "orignal"
+     * @param size the size of image. Restricted to: "w92", "w154", "w185", "w342", "w500", "w780", "original"
      * @return the url of poster image.
      */
     fun getPosterUrl(size: String): String {

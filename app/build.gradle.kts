@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -42,6 +44,17 @@ android {
 dependencies {
     implementation(project(":network"))
 
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.material3.common.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.coil.compose)
+
+    // glide integration
+    implementation(libs.compose)
 
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
@@ -74,4 +87,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+}
+
+kapt {
+    correctErrorTypes = true
 }
