@@ -67,14 +67,18 @@ class MainActivity : ComponentActivity() {
                             val movieId: Int = backStackEntry.arguments?.getInt("movieId") ?: -1
                             MovieListScreen(
                                 movieId = movieId,
-                                onAddClicked = { navController.navigate(route = "search_screen") },
+                                onAddClicked = { navController.navigate(route = "search_screen/$it") },
                                 onMovieSelected = { navController.navigate(route = "movie_details/$it") },
                             )
                         }
                         composable(
-                            route = "search_screen") {
-                            MovieSearchScreen()
-
+                            route = "search_screen/{movieId}",
+                            arguments = listOf(navArgument("movieId") {type = NavType.IntType})
+                        ) { backStackEntry ->
+                            val movieId: Int = backStackEntry.arguments?.getInt("movieId") ?: -1
+                            MovieSearchScreen(
+                                onMovieClick = {navController.navigate(route = "list_screen/$movieId")}
+                            )
                         }
                         composable(
                             route = "start_screen") {
